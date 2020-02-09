@@ -1,2 +1,2 @@
 # er_generate
-模型生成er图
+json转化为dot,后端
