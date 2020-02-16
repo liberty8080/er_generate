@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+
 from sqlalchemy import (MetaData, Table, Column, Integer, String, ForeignKey)
 from eralchemy import render_er
 import json
