@@ -64,12 +64,13 @@ class Column(Drawable):
         return '    {}{} {{label:"{}"}}'.format(self.key_symbol, self.name, self.type)
 
     def to_dot(self):
-        base = ROW_TAGS.format(' ALIGN="LEFT"', '{key_opening}{col_name}{key_closing}{type}')
+        base = ROW_TAGS.format(' ALIGN="CENTER"', '{key_opening}{col_name}{key_closing}{type}')
         return base.format(
             key_opening='<u>' if self.is_key else '',
             key_closing='</u>' if self.is_key else '',
             col_name=FONT_TAGS.format(self.name),
-            type=FONT_TAGS.format(' [{}]').format(self.type) if self.type is not None else ''
+            # type=FONT_TAGS.format('{}').format(self.type) if self.type is not None else ''
+            type=''
         )
 
 
@@ -78,9 +79,9 @@ class Relation(Drawable):
     RE = re.compile(
         '(?P<left_name>[^\s]+)\s*(?P<left_cardinality>[*?+1])--(?P<right_cardinality>[*?+1])\s*(?P<right_name>[^\s]+)')  # noqa: E501
     cardinalities = {
-        '*': '0..N',
-        '?': '{0,1}',
-        '+': '1..N',
+        '*': 'N',
+        '?': '1',
+        '+': 'N',
         '1': '1',
         '': None
     }

@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
+from sqlalchemy import (MetaData, Table, Column, String, ForeignKey)
 
-
-from sqlalchemy import (MetaData, Table, Column, Integer, String, ForeignKey)
 from eralchemy import render_er
-import json
 
 '''
 metadata = MetaData()
@@ -37,6 +35,25 @@ def _transfer_column(col_dict):
         return col
 
 
+def transfer_table2(data):
+    metadata = MetaData()
+    if isinstance(data, list):
+        for entity in data:
+            table = Table(entity["entity"], metadata)
+
+            # print(entity["entity"])
+            index = 0
+            for col in entity["column"]:
+                col = Column(col)
+                if entity["fk"] != "" and index == 0:
+                    col.append_foreign_key(ForeignKey(entity["fk"]))
+                table.append_column(col)
+                print(index)
+                index += 1
+
+    return metadata
+
+
 if __name__ == '__main__':
     dat = {
         "user": [{
@@ -46,9 +63,15 @@ if __name__ == '__main__':
         "表1": [{
             "column_name": "列名",
             "data_type": "VARCHAR",
-            "fk": "user.column_name"
+            "fk": "user"
         }]
     }
-    tab = transfer_table(dat)
-    render_er(tab, 'test.png')
-    print(tab)
+    data2 = [{"entity": "user1", "column": ["c1", "c2", "c3"], "fk": ""},
+             {"entity": "user2", "column": ["c1", "c2", "c3"], "fk": "user1"},
+             {"entity": "user3", "column": ["c1", "c2", "c3"], "fk": "user1"}]
+
+    # tab = transfer_table(dat)
+    # render_er(tab, 'test2.png')
+    # print(tab)
+
+    render_er(transfer_table2(data2), "test2.png")
